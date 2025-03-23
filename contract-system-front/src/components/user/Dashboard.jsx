@@ -13,13 +13,12 @@ const Dashboard = () => {
 
     const [newCotractData, setNewContractData] = useState({
         contract_name: "",
-        starting_date: new Date().toISOString().split('T')[0],
-        expiration_date: "",
-        signing_date: null,
-        total_cost: "",
+        starting_date: null,
+        expiration_date: null,
+        cost: 0,
         items: "",
         contract_terms : "",
-        Legal_officer_name: auth.user.name,
+        owner: auth.user.name,
         warranty_start_date: "",
         warranty_end_date: "",
         company_name: "",
@@ -94,9 +93,67 @@ const Dashboard = () => {
                     </div>
                     <div className="row">
 
-                        {contracts.map(contract => ( 
+                        {/* {contracts.map(contract => ( 
                              <AdminContract key={contract.contract_id} contract={contract} getContracts={getContracts}  /> )
-                        )}
+                        )} */}
+                        {/* <table className='table table-bordered'>
+                            <thead>
+                                <tr>
+                                    <th>contract name</th>
+                                    <th>starting date</th>
+                                    <th>expiration date</th>
+                                    <th>cost</th>
+                                    <th>items</th>
+                                    <th>contract terms</th>
+                                    <th>company name</th>
+                                    <th>address</th>
+                                    <th>company phone</th>
+                                    <th>status</th>
+                                    <th>action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {contracts.map(contract => (
+                                    <tr key={contract.contract_id}>
+                                        <td>{contract.contract_name}</td>
+                                        <td>{contract.starting_date}</td>
+                                        <td>{contract.expiration_date}</td>
+                                        <td>{contract.total_cost } </td>
+                                        <td>{contract.items}</td>
+                                        <td>{contract.contract_terms}</td>
+                                        <td>{contract.company_name}</td>
+                                        <td>{contract.address}</td>
+                                        <td>{contract.company_phone}</td>
+                                        <td>{contract.status}</td>
+                                        <td>
+                                            <button
+                                                className="btn btn-danger"
+                                                onClick={() => delete_Contract(contract.contract_id)}
+                                            >
+                                                delete
+                                            </button>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>          
+                        </table> */}
+
+                        <table className='table table-bordered text-dark'>
+                            <thead>
+                                <tr>
+                                    <th>contract name</th>
+                                    <th>starting date</th>
+                                    <th>expiration date</th>
+                                    <th>cost</th>
+                                    <th>items</th>
+                                    <th>status</th>
+                                    <th>action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {contracts.map(contract =>  {return contract.status != "WAITING" ?  <AdminContract key={contract.contract_id} contract={contract} getContracts={getContracts}  /> : null} )}
+                            </tbody>
+                        </table>
                     </div>
                 </div>
 
@@ -130,7 +187,7 @@ const Dashboard = () => {
                         ref={closeButtonRef} 
                         />
                     </div>
-                    <div className="modal-body">
+                    <div className="modal-body text-dark">
 
                         <div className="form-group">
                         <label htmlFor="contractName">contract name:</label>
@@ -147,45 +204,15 @@ const Dashboard = () => {
                         </div>
 
                         <div className="form-group">
-                        <label htmlFor="startingDate">starting date</label>
-                        <input
-                            type="date"
-                            name="starting_date"
-                            className="form-control"
-                            id="startingDate"
-                            aria-describedby="emailHelp"
-                            onChange={updateNewContractData}
-                            value={newCotractData.starting_date}
-                            disabled
-
-                        />
-                        </div>
-
-                        <div className="form-group">
-                        <label htmlFor="expirationDate">expiration date:</label>
-                        <input
-                            type="date"
-                            name="expiration_date"
-                            className="form-control"
-                            id="expirationDate:"
-                            aria-describedby="emailHelp"
-                            onChange={updateNewContractData}
-                            value={newCotractData.expiration_date}
-                            min={newCotractData.starting_date}
-
-                        />
-                        </div>
-
-                        <div className="form-group">
-                        <label htmlFor="totalCost">total cost</label>
+                        <label htmlFor="totalCost"> cost</label>
                         <input
                             type="number"
-                            name="total_cost"
+                            name="cost"
                             className="form-control"
                             id="totalCost"
                             aria-describedby="emailHelp"
                             onChange={updateNewContractData}
-                            value={newCotractData.total_cost}
+                            value={newCotractData.cost}
 
                         />
                         </div>
@@ -219,15 +246,15 @@ const Dashboard = () => {
                         </div>
 
                         <div className="form-group">
-                        <label htmlFor="LegalOfficerName">Legal officer name</label>
+                        <label htmlFor="LegalOfficerName">Owner</label>
                         <input
                             type="text"
-                            name="Legal_officer_name"
+                            name="owner"
                             className="form-control"
                             id="LegalOfficerName"
                             aria-describedby="emailHelp"
                             onChange={updateNewContractData}
-                            value={newCotractData.Legal_officer_name}
+                            value={newCotractData.owner}
                             disabled
 
                         />
@@ -245,6 +272,7 @@ const Dashboard = () => {
                             aria-describedby="emailHelp"
                             onChange={updateNewContractData}
                             value={newCotractData.warranty_start_date}
+                            min={new Date().toISOString().split('T')[0]}
 
                         />
                         </div>
@@ -259,6 +287,7 @@ const Dashboard = () => {
                             aria-describedby="emailHelp"
                             onChange={updateNewContractData}
                             value={newCotractData.warranty_end_date}
+                            min={new Date().toISOString().split('T')[0]}
 
                         />
                         </div>

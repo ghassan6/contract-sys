@@ -47,7 +47,7 @@ export default function SingleContract({ contract }) {
                         <div className="mt-3 pt-1">
                             <p className="text-muted mb-0">
                                 <i className="mdi mdi-phone font-size-15 align-middle pe-2 text-primary" />{" "}
-                                {contract.Legal_officer_name} : {contract.company_phone}
+                                {contract.owner} : {contract.company_phone}
                             </p>
                             <p className="text-muted mb-0 mt-2">
                                 <i className="mdi mdi-home font-size-15 align-middle pe-2 text-primary" />{" "}
@@ -73,11 +73,11 @@ export default function SingleContract({ contract }) {
                     <Modal.Title>{contract.contract_name}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body >
-                    <p>Contract Signing date: {contract.signing_date}</p>
+                    <p>Contract Strating date: {contract.starting_date}</p>
                     <p>Contract Exprtion date: {contract.expiration_date}</p>
-                    <p>Contract Total cost: ${contract.total_cost}</p>
+                    <p>Contract Total cost: ${contract.cost}</p>
                     <p>Items: {contract.items}</p>
-                    <p>Legal officer name: {contract.Legal_officer_name}</p>
+                    <p>Owner: {contract.owner}</p>
                     <p>Warranty start date: {contract.warranty_start_date}</p>
                     <p>Warranty end date: {contract.warranty_end_date}</p>
                     <p>Address: {contract.address}</p>

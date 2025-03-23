@@ -33,7 +33,18 @@ switch($method) {
             $stmt->bindParam(':id', $id);
             $stmt->execute();
             $contracts = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        } else {
+        } 
+        
+        else if (isset($_GET['contract_id'])) {
+            $id = $_GET['contract_id'];
+            $sql .= " WHERE contract_id = :id";
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':id', $id);
+            $stmt->execute();
+            $contracts = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        }
+        
+        else {
             $stmt = $conn->prepare($sql);
             $stmt->execute();
             $contracts = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -41,25 +52,31 @@ switch($method) {
 
         echo json_encode($contracts);
         break;
+
+        
     case "POST":
         $data = json_decode( file_get_contents('php://input') );
-        $sql = "INSERT INTO contract( contract_name, starting_date, expiration_date, total_cost, items, contract_terms, Legal_officer_name,employee_id,warranty_start_date,warranty_end_date,company_name,address,company_phone, status) 
-        VALUES( :contract_name, :starting_date, :expiration_date, :total_cost,:items, :contract_terms ,:Legal_officer_name,:employee_id,:warranty_start_date,:warranty_end_date,:company_name,:address,:company_phone, 'WAITING')";
+        $status = isset($data->starting_date) && $data->starting_date !== null ? 'PENDING' : 'WAITING';
+        $sql = "INSERT INTO contract( contract_name, starting_date, expiration_date, cost, items, contract_terms, owner,employee_id,warranty_start_date,warranty_end_date,company_name,address,company_phone, status, signed_by) 
+        VALUES( :contract_name, :starting_date, :expiration_date, :cost,:items, :contract_terms ,:owner,:employee_id,:warranty_start_date,:warranty_end_date,:company_name,:address,:company_phone, :status, :signed_by)";
         $stmt = $conn->prepare($sql);
         $result = $stmt->execute([
             'contract_name' => $data->contract_name,
             'starting_date' => $data->starting_date,
             'expiration_date' => $data->expiration_date,
-            'total_cost' => $data->total_cost,
+            'cost' => $data->cost,
             'items' => $data->items,
             'contract_terms' => $data->contract_terms,
-            'Legal_officer_name' => $data->Legal_officer_name,
+            'owner' => $data->owner,
             'employee_id' => $data->employee_id,
-            'warranty_start_date' => $data->warranty_start_date,
-            'warranty_end_date' => $data->warranty_end_date,
+            'warranty_start_date' => $data->warranty_start_date ?? null,
+            'warranty_end_date' => $data->warranty_end_date ?? null,
             'company_name' => $data->company_name,
             'address' => $data->address,
-            'company_phone' => $data->company_phone
+            'company_phone' => $data->company_phone,
+            'signed_by' => $data->signed_by ?? null,
+            'status' => $status
+            
         ]);
 
 
